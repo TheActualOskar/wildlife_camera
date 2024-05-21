@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Define the path to your project directory
-PROJECT_PATH="/Users/oskar/Documents/Cloud_project/cloud"
+PROJECT_PATH="/Users/oskar/Documents/Cloud_project"
 
 echo "Script started..."
 cd "$PROJECT_PATH" || { echo "Failed to change directory to $PROJECT_PATH. Exiting script."; exit 1; }
 
 # Directory where annotated JSON files will be stored before commit
-ANNOTATED_JSON_DIR="cloud/annotated_json"
+ANNOTATED_JSON_DIR="annotated_json"
 mkdir -p $ANNOTATED_JSON_DIR
 
 echo "Navigated to project directory, listing files in images directory:"
@@ -46,6 +46,8 @@ done
 cd $ANNOTATED_JSON_DIR
 git add .
 git commit -m "Batch commit of annotated JSON files"
+
+# Push to the correct branch
 git push origin master  # Change to 'master' if your branch is named 'master'
 
 echo "Script completed."
