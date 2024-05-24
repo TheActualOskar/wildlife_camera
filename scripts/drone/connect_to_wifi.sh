@@ -2,8 +2,8 @@
 
 # Variables
 WIFI_SSID="OskarErEnPrut"
-WIFI_PASSWORD="raspberry"
-NETWORK_DEVICE="en0"  # This is typically the WiFi interface on macOS, adjust if necessary
+WIFI_PASSWORD="emliemli"
+NETWORK_DEVICE="wlo1"  # This is typically the WiFi interface on macOS, adjust if necessary
 
 # Function to connect to WiFi
 function connect_to_wifi {
@@ -14,7 +14,7 @@ function connect_to_wifi {
         echo "Already connected to $WIFI_SSID."
     else
         echo "Connecting to $WIFI_SSID..."
-        networksetup -setairportnetwork $NETWORK_DEVICE $WIFI_SSID $WIFI_PASSWORD
+        nmcli device wifi connect "$WIFI_SSID" password "$WIFI_PASSWORD" 
         if [ $? -eq 0 ]; then
             echo "Successfully connected to $WIFI_SSID."
         else
