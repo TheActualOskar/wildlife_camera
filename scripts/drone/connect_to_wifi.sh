@@ -2,7 +2,7 @@
 
 # Variables
 WIFI_SSID="OskarErEnPrut"
-WIFI_PASSWORD="raspberry"
+WIFI_PASSWORD="emliemli"
 NETWORK_DEVICE="en0"  # This is typically the WiFi interface on macOS, adjust if necessary
 
 # Function to connect to WiFi
