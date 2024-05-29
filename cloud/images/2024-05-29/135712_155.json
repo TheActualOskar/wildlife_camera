@@ -1,0 +1,17 @@
+{
+  "File Name": "135712_155.jpg",
+  "Create Date": "2024-05-29 13:57:13.464+0200",
+  "Create Seconds Epoch": 1716983833.467,
+  "Trigger": "external",
+  "Subject Distance": 0.5574136009,
+  "Exposure Time": "1/33",
+  "ISO": 200,
+  "Drone Copy": {
+    "Drone ID": "WILDDRONE-001",
+    "Seconds Epoch": "1716983845.3N"
+  },
+  "Annotation": {
+    "Source": "Ollama:7b",
+    "Test": "OLLAMA PLACEHOLDER."
+  }
+}

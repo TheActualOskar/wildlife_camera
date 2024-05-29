@@ -1,52 +1,44 @@
 #!/bin/bash
 
 # Define the path to your project directory
-PROJECT_PATH="/home/baumann/Downloads/Test/wildlife_camera/cloud"
+PROJECT_PATH="/Users/oskar/Documents/Cloud_project/cloud"
 
 echo "Script started..."
 cd "$PROJECT_PATH" || { echo "Failed to change directory to $PROJECT_PATH. Exiting script."; exit 1; }
 
-# Directory where annotated JSON files will be stored before commit
-ANNOTATED_JSON_DIR="cloud/annotated_json"
-mkdir -p $ANNOTATED_JSON_DIR
-
-echo "Navigated to project directory, listing files in images directory:"
+echo "Navigating to project directory, listing files in images directory:"
 ls images/
 
-# Loop through each image file in the images directory
-for image in images/*; do
-    if [[ $(file --mime-type -b "$image") == image/* ]]; then
-        filename=$(basename -- "$image")
-        base="${filename%.*}"
-        
-        echo "Processing $filename:"
-        
-        # Annotate the image and extract the description
-        description=$(ollama run llava:13b "describe $image")
-        
-        # Update the JSON file with the annotation
-        json_file="json/${base}.json"
-        
-        if [[ -f "$json_file" ]]; then
-            # If the JSON file exists, update it
-            jq --arg desc "$description" --arg source "Ollama:13b" \
-                '.Annotation = {"Source": $source, "Test": $desc}' "$json_file" > "$ANNOTATED_JSON_DIR/${base}.json"
-        else
-            # If the JSON file does not exist, create it
-            echo "{\"Annotation\": {\"Source\": \"Ollama:13b\", \"Test\": \"$description\"}}" > "$ANNOTATED_JSON_DIR/${base}.json"
-        fi
-        
-        echo "Updated JSON for $filename with new description."
-    else
-        echo "$filename is not an image file."
-    fi
+# Recursively find and update all JSON files in the images directory and subdirectories
+find images/ -type f -name "*.json" -print0 | while IFS= read -r -d $'\0' json_file; do
+    filename=$(basename -- "$json_file")
+    directory=$(dirname "$json_file")
+    
+    echo "Processing JSON file: $filename in directory $directory:"
+
+    # Update the JSON file with the new annotation directly
+    jq '.Annotation = {"Source": "Ollama:7b", "Test": "OLLAMA PLACEHOLDER."}' "$json_file" > "${json_file}.tmp" && mv "${json_file}.tmp" "$json_file"
+
+    echo "Updated JSON for $filename with new annotation."
 done
 
-# Commit updated JSON files to Git
-cd $ANNOTATED_JSON_DIR
+echo "Deleting all image files..."
+
+# Now delete all image files in the images directory and subdirectories
+find images/ -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) -exec rm {} \;
+
+echo "All image files have been deleted, only JSON files remain."
+
+# Adding changes to git
+echo "Adding changes to Git..."
 git add .
-git commit -m "Batch commit of annotated JSON files"
-git push origin master  # Change to 'master' if your branch is named 'master'
+
+# Committing changes to git
+echo "Committing changes..."
+git commit -m "Updated JSON files and removed image files"
+
+# Pushing changes to GitHub
+echo "Pushing changes to GitHub..."
+git push origin master
 
 echo "Script completed."
-
