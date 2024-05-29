@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the path to your project directory
-PROJECT_PATH="/Users/oskar/Documents/Cloud_project/cloud"
+PROJECT_PATH="/home/baumann/Downloads/Test/wildlife_camera/cloud"
 
 echo "Script started..."
 cd "$PROJECT_PATH" || { echo "Failed to change directory to $PROJECT_PATH. Exiting script."; exit 1; }

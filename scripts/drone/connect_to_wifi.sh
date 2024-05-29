@@ -14,7 +14,7 @@ function connect_to_wifi {
         echo "Already connected to $WIFI_SSID."
     else
         echo "Connecting to $WIFI_SSID..."
-        networksetup -setairportnetwork $NETWORK_DEVICE $WIFI_SSID $WIFI_PASSWORD
+        nmcli device wifi connect "$WIFI_SSID" password "$WIFI_PASSWORD" 
         if [ $? -eq 0 ]; then
             echo "Successfully connected to $WIFI_SSID."
         else
