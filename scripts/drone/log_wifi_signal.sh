@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Database file path
-DB_FILE="/Users/oskar/Documents/Cloud_project/cloud/images/wifi_signal.db"
+DB_FILE="/Users/oskar/Documents/Cloud_project/cloud/wifi_signal.db"
 
 # Function to log Wi-Fi signal data
 log_wifi_signal() {
@@ -22,7 +22,7 @@ EOF
         fi
 
         # Sleep for a specified interval before logging again (e.g., 60 seconds)
-        sleep 60
+        sleep 15
     done
 }
 

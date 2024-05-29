@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Database file path
-DB_FILE="/Users/oskar/Documents/Cloud_project/cloud/images/wifi_signal.db"
+DB_FILE="/Users/oskar/Documents/Cloud_project/cloud/wifi_signal.db"
 
 # Check if the database file exists
 if [ ! -f "${DB_FILE}" ]; then
