@@ -1,29 +1,31 @@
 #!/bin/bash
 
-# Variables
-DB_NAME="wifi_signal_log.db"
-TABLE_NAME="wifi_signal"
-RASPBERRY_PI_USER="emli"
-RASPBERRY_PI_HOST="192.168.10.1"
-RASPBERRY_PI_PASSWORD="raspberry"
+# Database file path
+DB_FILE="/Users/oskar/Documents/Cloud_project/cloud/images/wifi_signal.db"
 
-# Log Wi-Fi signal strength and timestamp
-log_signal() {
+# Function to log Wi-Fi signal data
+log_wifi_signal() {
     while true; do
-        # Get the current Wi-Fi signal strength
-        SIGNAL_STRENGTH=$(airport -I | grep -i "agrCtlRSSI" | awk '{print $2}')
-        TIMESTAMP=$(date +%s)
+        TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
+        SIGNAL_LEVEL=$(airport -I | grep -i "agrCtlRSSI" | awk '{print $2}')
+        LINK_QUALITY=$(airport -I | grep -i "agrCtlNoise" | awk '{print $2}')
 
-        # Insert the data into the SQLite database
-        sqlite3 ${DB_NAME} "INSERT INTO ${TABLE_NAME} (timestamp, signal_strength) VALUES (${TIMESTAMP}, ${SIGNAL_STRENGTH});"
+        # Insert the data into the database
+        sqlite3 "${DB_FILE}" <<EOF
+        INSERT INTO wifi_signal_log (timestamp, signal_level, link_quality) VALUES ('${TIMESTAMP}', '${SIGNAL_LEVEL}', '${LINK_QUALITY}');
+EOF
 
-        echo "Logged Wi-Fi signal data at $(date)"
+        if [ $? -eq 0 ]; then
+            echo "Logged WiFi signal data at ${TIMESTAMP}"
+        else
+            echo "Failed to log WiFi signal data"
+        fi
 
-        # Sleep for a while before logging again
-        sleep 10
+        # Sleep for a specified interval before logging again (e.g., 60 seconds)
+        sleep 60
     done
 }
 
-# Start logging Wi-Fi signal
-log_signal
+# Call the function to log Wi-Fi signal data
+log_wifi_signal
 

@@ -1,11 +1,25 @@
 #!/bin/bash
 
-# Variables
-DB_NAME="wifi_signal_log.db"
-TABLE_NAME="wifi_signal"
+# Database file path
+DB_FILE="/Users/oskar/Documents/Cloud_project/cloud/images/wifi_signal.db"
 
-# Create SQLite database and table if they do not exist
-sqlite3 ${DB_NAME} "CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (timestamp INTEGER PRIMARY KEY, signal_strength INTEGER);"
-
-echo "Database and table created successfully."
+# Check if the database file exists
+if [ ! -f "${DB_FILE}" ]; then
+    # Create the database and table
+    sqlite3 "${DB_FILE}" <<EOF
+    CREATE TABLE wifi_signal_log (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        timestamp TEXT NOT NULL,
+        signal_level INTEGER NOT NULL,
+        link_quality INTEGER NOT NULL
+    );
+EOF
+    if [ $? -eq 0 ]; then
+        echo "Database and table created successfully."
+    else
+        echo "Failed to create database and table."
+    fi
+else
+    echo "Database already exists. Skipping creation."
+fi
 

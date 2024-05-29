@@ -23,22 +23,27 @@ copy_files() {
         LOCAL_DIR="${LOCAL_CLOUD_DIR}$(basename ${DIR_NAME})"
         mkdir -p "${LOCAL_DIR}"
 
-        # Copy the file to the local directory
-        sshpass -p "${RASPBERRY_PI_PASSWORD}" scp "${RASPBERRY_PI_USER}@${RASPBERRY_PI_HOST}:${FILE}" "${LOCAL_DIR}/"
-        if [ $? -eq 0 ]; then
-            echo "Copied ${FILE} to ${LOCAL_DIR}/"
-
-            # Update metadata JSON file
-            JSON_FILE="${DIR_NAME}/${BASE_NAME%.jpg}.json"
-            EPOCH_TIME=$(date +%s.%3N)
-            sshpass -p "${RASPBERRY_PI_PASSWORD}" ssh "${RASPBERRY_PI_USER}@${RASPBERRY_PI_HOST}" "jq --arg drone_id '${DRONE_ID}' --arg epoch '${EPOCH_TIME}' '.\"Drone Copy\" = {\"Drone ID\": \$drone_id, \"Seconds Epoch\": \$epoch}' ${JSON_FILE} > ${JSON_FILE}.tmp && mv ${JSON_FILE}.tmp ${JSON_FILE}"
-            if [ $? -eq 0 ]; then
-                echo "Updated metadata for ${JSON_FILE}"
-            else
-                echo "Failed to update metadata for ${JSON_FILE}"
-            fi
+        # Check if the file already exists locally
+        if [ -f "${LOCAL_DIR}/${BASE_NAME}" ]; then
+            echo "File ${LOCAL_DIR}/${BASE_NAME} already exists, skipping."
         else
-            echo "Failed to copy ${FILE}"
+            # Copy the file to the local directory
+            sshpass -p "${RASPBERRY_PI_PASSWORD}" scp "${RASPBERRY_PI_USER}@${RASPBERRY_PI_HOST}:${FILE}" "${LOCAL_DIR}/"
+            if [ $? -eq 0 ]; then
+                echo "Copied ${FILE} to ${LOCAL_DIR}/"
+
+                # Update metadata JSON file
+                JSON_FILE="${DIR_NAME}/${BASE_NAME%.jpg}.json"
+                EPOCH_TIME=$(date +%s.%3N)
+                sshpass -p "${RASPBERRY_PI_PASSWORD}" ssh "${RASPBERRY_PI_USER}@${RASPBERRY_PI_HOST}" "sudo chmod 666 ${JSON_FILE} && sudo jq --arg drone_id '${DRONE_ID}' --arg epoch '${EPOCH_TIME}' '.\"Drone Copy\" = {\"Drone ID\": \$drone_id, \"Seconds Epoch\": \$epoch}' ${JSON_FILE} > ${JSON_FILE}.tmp && sudo mv ${JSON_FILE}.tmp ${JSON_FILE} && sudo chmod 644 ${JSON_FILE}"
+                if [ $? -eq 0 ]; then
+                    echo "Updated metadata for ${JSON_FILE}"
+                else
+                    echo "Failed to update metadata for ${JSON_FILE}"
+                fi
+            else
+                echo "Failed to copy ${FILE}"
+            fi
         fi
     done
 }
