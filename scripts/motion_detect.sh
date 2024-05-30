@@ -10,12 +10,12 @@ mkdir -p "$SAVE_DIR"
 
 # Paths to the images
 IMAGE1_PATH="$SAVE_DIR/$CURRENT_TIME.jpg"
-rpicam-still -o "$IMAGE1_PATH" -t  0.45
+rpicam-still -o "$IMAGE1_PATH" -t  0.01
 
-sleep 5
+sleep 2
 
 IMAGE2_PATH="$SAVE_DIR/$CURRENT_TIME.jpg"
-rpicam-still -o "$IMAGE2_PATH" -t 0.45
+rpicam-still -o "$IMAGE2_PATH" -t 0.01
 
 # Path to the Python script
 PYTHON_SCRIPT="/home/emli/scripts/motion_detect.py"
