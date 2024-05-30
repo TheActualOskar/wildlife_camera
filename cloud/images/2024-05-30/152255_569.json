@@ -1,14 +1,14 @@
 {
-  "File Name": "135656_508.jpg",
-  "Create Date": "2024-05-29 13:56:57.856+0200",
-  "Create Seconds Epoch": 1716983817.859,
-  "Trigger": "external",
+  "File Name": "152255_569.jpg",
+  "Create Date": "2024-05-30 15:22:56.833+0200",
+  "Create Seconds Epoch": 1717075376.836,
+  "Trigger": "timed",
   "Subject Distance": 0.5574136009,
   "Exposure Time": "1/33",
   "ISO": 200,
   "Drone Copy": {
     "Drone ID": "WILDDRONE-001",
-    "Seconds Epoch": "1717077167.3N"
+    "Seconds Epoch": "1717077168.3N"
   },
   "Annotation": {
     "Source": "Ollama:7b",
